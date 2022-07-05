@@ -17,3 +17,57 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('user')->group(function(){
+    
+    Route::post('/register', 
+    [\App\Http\Controllers\API\UserController::class,'create']);
+    
+    Route::post('/login',
+    [\App\Http\Controllers\API\UserController::class,'login']);
+
+});
+
+Route::prefix('post')->group(function(){
+
+    Route::get('/read/{user_post}',
+    [\App\Http\Controllers\API\PostController::class,
+    'getPostbyId']);
+
+    Route::post('/upload',
+    [\App\Http\Controllers\API\PostController::class,
+    'createPost']);
+
+});
+
+Route::prefix('notes')->group(function(){
+
+    Route::post('/create',
+    [\App\Http\Controllers\API\NotesController::class,
+    'create']);
+    
+});
+
+Route::prefix('comment')->group(function(){
+
+    Route::get('/read/{id}',
+    [\App\Http\Controllers\API\CommentController::class,
+    'getCommentbyId']);
+
+    Route::post('/create',
+    [App\Http\Controllers\API\CommentController::class,
+    'create']);
+
+});
+
+Route::prefix('like')->group(function(){
+
+    Route::get('/read/{id}',
+    [\App\Http\Controllers\API\LikeController::class,
+    'getLikebyId']);
+
+    Route::post('/create',
+    [App\Http\Controllers\API\LikeController::class,
+    'create']);
+
+});
