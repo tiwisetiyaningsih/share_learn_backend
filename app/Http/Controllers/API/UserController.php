@@ -67,8 +67,45 @@ class UserController extends Controller
             return response()->json([
                 'message'   => 'username atau password salah'
             ], 200);
-        }    
+        }
+    }
+
+    public function update(Request $request, $id_user)
+    {
+        $validator = Validator::make($request->all(), [
+            "username" => 'required|string',
+            "fullname" => 'required|string',
+            "nis" => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                $validator->errors()
+            ], 400);
+        }
+
+        $user = User::find($id_user);
+        // return $customer;
+        if ($user) {
+            // $customer->nama_depan = $validated['nama_depan'];
+            // $customer->nama_belakang = $validated['nama_belakang'];
+            // $customer->no_hp = $validated['no_hp'];
+            $user->update([
+                "username" => $request->username,
+                "fullname" => $request->fullname,
+                "nis" => $request->nis
+            ]);
+
+            $user->save();
+
+            return response()->json([
+                'message'   => 'success',
+                'data'      => $user
+            ], 200);
+        } else {
+            return response()->json([
+                'message'   => 'There is no data found',
+                'data'      => null
+            ], 500);
+        }
     }
 }
-
-

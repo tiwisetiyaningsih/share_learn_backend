@@ -26,6 +26,10 @@ Route::prefix('user')->group(function(){
     Route::post('/login',
     [\App\Http\Controllers\API\UserController::class,'login']);
 
+    Route::post('/update/{id_user}',
+    [\App\Http\Controllers\API\UserController::class,
+    'update']);
+
 });
 
 Route::prefix('post')->group(function(){
@@ -33,6 +37,10 @@ Route::prefix('post')->group(function(){
     Route::get('/read/{user_post}',
     [\App\Http\Controllers\API\PostController::class,
     'getPostbyId']);
+
+    Route::get('/read',
+    [\App\Http\Controllers\API\PostController::class,
+    'getAllPost']);
 
     Route::post('/upload',
     [\App\Http\Controllers\API\PostController::class,
@@ -46,6 +54,13 @@ Route::prefix('notes')->group(function(){
     [\App\Http\Controllers\API\NotesController::class,
     'create']);
     
+    Route::get('/read/{user_notes}',
+    [\App\Http\Controllers\API\NotesController::class,
+    'getNotesbyId']);
+
+    Route::post('/update/{id_notes}',
+    [\App\Http\Controllers\API\NotesController::class,
+    'update']);
 });
 
 Route::prefix('comment')->group(function(){
