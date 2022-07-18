@@ -46,6 +46,26 @@ Route::prefix('post')->group(function(){
     [\App\Http\Controllers\API\PostController::class,
     'createPost']);
 
+    Route::get('/readmapel/{mapel}',
+    [\App\Http\Controllers\API\PostController::class,
+    'getAllPostbyMapel']);
+
+    Route::post('/updatePost/{id}',
+    [\App\Http\Controllers\API\PostController::class,
+    'updatePost']);
+
+    Route::post('/updatePostPdf/{id}',
+    [\App\Http\Controllers\API\PostController::class,
+    'updatePostPdf']);
+
+   Route::get('/delete/{id}',
+   [\App\Http\Controllers\API\PostController::class,
+   'delete']);
+
+   Route::post('/uploadpdf',
+   [\App\Http\Controllers\API\PostController::class,
+   'createPostPdf']);
+
 });
 
 Route::prefix('notes')->group(function(){
@@ -61,6 +81,14 @@ Route::prefix('notes')->group(function(){
     Route::post('/update/{id_notes}',
     [\App\Http\Controllers\API\NotesController::class,
     'update']);
+
+    Route::post('/updateNotes/{id}',
+    [\App\Http\Controllers\API\NotesController::class,
+    'updateNotes']);
+
+    Route::get('/delete/{id}',
+    [\App\Http\Controllers\API\NotesController::class,
+    'delete']);
 });
 
 Route::prefix('comment')->group(function(){

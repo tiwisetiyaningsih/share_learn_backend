@@ -59,39 +59,29 @@ class NotesController extends Controller
             ]);
         }
     }
-    public function update(Request $request, $id_notes)
+
+    public function updateNotes( Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            "judul_notes" => 'required|string',
-            "sub_judul_notes" => 'required|string',
-            "notes" => 'required|string'
+        $notes = Notes::where('id_notes', $id)
+        ->update([
+            "judul_notes" => $request->judul_notes,
+            "sub_judul_notes" => $request->sub_judul_notes,
+            "notes" => $request->notes
         ]);
-        if ($validator->fails()) {
-            return response()->json([
-                $validator->errors()
-            ], 400);
-        }
-
-        $notes = Notes::find($id_notes);
-        
-        if ($notes) {
-            $notes->update([
-                "judul_notes" => $request->judul_notes,
-                "sub_judul_notes" => $request->sub_judul_notes,
-                "notes" => $request->notes
-            ]);
-
-            $notes->save();
-
-            return response()->json([
-                'message'   => 'success',
-                'data'      => $notes
-            ], 200);
-        } else {
-            return response()->json([
-                'message'   => 'There is no data found',
-                'data'      => null
-            ], 500);
-        }
+        return response()->json([
+            'massage'   => 'success',
+            'data'      => $notes
+        ], 200);
     }
+
+    public function delete($id)
+    {
+        $notes = Notes::where('id_notes',$id);
+        $notes->delete();
+        return response()->json([
+            'massage'   => 'success',
+            'data'      => $notes
+        ], 200);
+    }
+    
 }
