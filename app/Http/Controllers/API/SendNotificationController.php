@@ -45,7 +45,7 @@ class SendNotificationController extends Controller
         $res = json_decode($response, true);
 
         return response()->json([
-                'massage' => 'success like',
+                'massage' => 'notif masuk',
                 'data' => $res,
             ]);
     }
