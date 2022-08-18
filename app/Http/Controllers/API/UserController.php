@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
+use App\Models\Like;
+use App\Models\Notes;
+use App\Models\Notif;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -27,11 +32,11 @@ class UserController extends Controller
                 $validator->errors()
             ], 400);
         }
-        $cekuser = User::where('username', $request-> username)
-        ->first();
+        $cekuser = User::where('username', $request->username)
+            ->first();
         if ($cekuser) {
             return response()->json([
-                'message' => 'username telah terpakai',
+                'message' => 'The username is used!',
                 'data' => $cekuser,
             ]);
         }
@@ -63,6 +68,12 @@ class UserController extends Controller
             $user = DB::table('users')->where('username', $request->username)->first();
             // return $user ;
             if (Hash::check($request->password, $user->password)) {
+                
+                $updated_token = User::where('username', $request->username)
+                ->update([
+                    'remember_token' => $request->token
+                ]);
+
                 return response()->json([
                     'message'   => 'data falid',
                     'data'      => $user
@@ -95,7 +106,7 @@ class UserController extends Controller
     //     $user = User::find($id_user);
     //     // return $user;
     //     if ($user) {
-            
+
     //         $user->update([
     //             "username" => $request->username,
     //             "fullname" => $request->fullname,
@@ -115,15 +126,43 @@ class UserController extends Controller
     //         ], 500);
     //     }
     // }
-    
-    public function update( Request $request, $id_user)
+
+    public function update(Request $request, $id_user)
     {
         $user = User::where('id_users', $id_user)
-        ->update([
-            "username" => $request->username,
-            "fullname" => $request->fullname,
-            "nis" => $request->nis
-        ]);
+            ->update([
+                "fullname" => $request->fullname,
+                "nis" => $request->nis
+            ]);
+
+        if ($user) {
+            $post = Post::where('user_post', $request->fullname_before)
+            ->update([
+                "user_post" => $request->fullname
+            ]);
+
+            $note = Notes::where('user_notes', $request->fullname_before)
+            ->update([
+                "user_notes" => $request->fullname
+            ]);
+
+            $comment = Comment::where('user_comment', $request->fullname_before)
+            ->update([
+                "user_comment" => $request->fullname
+            ]);
+
+            $like = Like::where('user_like', $request->fullname_before)
+            ->update([
+                "user_like" => $request->fullname
+            ]);
+
+            $notif = Notif::where('user_notif', $request->fullname_before)
+            ->update([
+                "user_notif" => $request->fullname
+            ]);
+        }
+
+
         return response()->json([
             'massage'   => 'success',
             'data'      => $user
